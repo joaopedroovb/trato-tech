@@ -6,6 +6,8 @@ import {
   // AiFillPlusCircle,
 } from 'react-icons/ai';
 import { FaCalendarPlus } from 'react-icons/fa'
+import { mudarFavorito } from 'store/reducers/itens';
+import { useDispatch } from 'react-redux'
 
 const iconeProps = {
   size: 24,
@@ -19,7 +21,15 @@ export default function Item(props) {
     preco,
     descricao,
     favorito,
+    id,
   } = props;
+
+  const dispatch = useDispatch();
+
+  function resolverFavorito() {
+    dispatch(mudarFavorito(id));
+  }
+
   return (
     <div className={styles.item}>
       <div className={styles['item-imagem']}>
@@ -40,12 +50,12 @@ export default function Item(props) {
                 {...iconeProps}
                 color='#ff0000'
                 className={styles['item-acao']}
-              // onClick={resolverFavorito}
+                onClick={resolverFavorito}
               />
               : <AiOutlineHeart
                 {...iconeProps}
                 className={styles['item-acao']}
-              // onClick={resolverFavorito}
+                onClick={resolverFavorito}
               />
             }
             <FaCalendarPlus
