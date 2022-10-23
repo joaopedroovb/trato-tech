@@ -7,7 +7,9 @@ import {
 } from 'react-icons/ai';
 import { FaCalendarPlus } from 'react-icons/fa'
 import { mudarFavorito } from 'store/reducers/itens';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { mudarCarrinho } from 'store/reducers/carrinho';
+import classNames from 'classnames';
 
 const iconeProps = {
   size: 24,
@@ -22,16 +24,24 @@ export default function Item(props) {
     descricao,
     favorito,
     id,
+    carrinho,
   } = props;
 
   const dispatch = useDispatch();
+  const estaNoCarinho = useSelector(state => state.carrinho.some(itemNoCarrinho => itemNoCarrinho.id === id))
 
   function resolverFavorito() {
     dispatch(mudarFavorito(id));
   }
 
+  function resolverCarrinho() {
+    dispatch(mudarCarrinho(id));
+  }
+
   return (
-    <div className={styles.item}>
+    <div className={classNames(styles.item, {
+      [styles.itemNoCarrinho]: carrinho,
+    })}>
       <div className={styles['item-imagem']}>
         <img src={foto} alt={titulo} />
       </div>
@@ -60,8 +70,9 @@ export default function Item(props) {
             }
             <FaCalendarPlus
               {...iconeProps}
-              color={true ? '#1875e8' : 'iconsProps.color'}
+              color={estaNoCarinho ? '#1875e8' : 'iconsProps.color'}
               className={styles['item-acao']}
+              onClick={resolverCarrinho}
             />
           </div>
         </div>
